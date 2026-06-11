@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>여행계획 대시보드</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif; }
         body { background:linear-gradient(135deg,#e0f7fa 0%,#fff3e0 100%); color:#2c3e50; min-height:100vh; }
@@ -90,16 +91,16 @@
         .add-bar select { min-width:180px; } .add-bar input { width:90px; }
         .add-bar button { padding:10px 18px; background:#00897b; color:#fff; border:none; border-radius:10px; cursor:pointer; font-weight:600; }
         
-        /* 여행스케줄 드래그 앤 드롭 아이템 양식 보완 */
+        /* 여행스케줄 스타일 보완 및 드래그 애니메이션 클래스 */
         .sched-list { list-style:none; min-height: 100px; }
-        .sched-item { background:#fff; border-radius:12px; padding:14px 16px; margin-bottom:10px; box-shadow:0 2px 6px rgba(0,0,0,.06); display:flex; align-items:center; gap:12px; border-left:5px solid #26a69a; transition: opacity 0.2s, transform 0.2s; }
-        .sched-item.dragging { opacity:.3; transform: scale(0.97); border: 2px dashed #b0bec5; }
+        .sched-item { background:#fff; border-radius:12px; padding:14px 16px; margin-bottom:10px; box-shadow:0 2px 6px rgba(0,0,0,.06); display:flex; align-items:center; gap:12px; border-left:5px solid #26a69a; transition: background-color 0.2s; }
+        .sched-item.dragging { opacity:.4; background-color: #f1f3f5; border: 2px dashed #b0bec5 !important; }
         .sched-item.play{border-left-color:#ff7043;} .sched-item.food{border-left-color:#ec407a;} .sched-item.cafe{border-left-color:#ab47bc;}
         .sched-item .time-input { width:70px; padding:6px 8px; border:1.5px solid #cfd8dc; border-radius:8px; font-weight:700; color:#00897b; text-align:center; }
-        .sched-item .info { flex:1; pointer-events: none; } /* 폰트 영역 클릭 시 드래그 깨짐 방지 */
+        .sched-item .info { flex:1; }
         .sched-item .info h4 { font-size:16px; margin-bottom:3px; color:#2c3e50; }
         .sched-item .info small { color:#607d8b; }
-        .sched-item .drag-handle { color:#b0bec5; font-size:20px; cursor:grab; margin-right: 4px; user-select: none; }
+        .sched-item .drag-handle { color:#b0bec5; font-size:20px; cursor:grab; padding: 4px 10px; user-select: none; }
         .sched-item .sched-map { background:#e3f2fd; color:#1565c0; border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700; font-size:12px; }
         .sched-item .del { background:#ffebee; color:#e53935; border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700; }
         
@@ -230,7 +231,7 @@
     </div>
 
     <div id="schedule" class="tab-content">
-        <div class="tip">💡 항목 전체를 클릭해 위아래로 끌면 동선 순서가 즉시 변경되며 파이어베이스에 실시간 저장됩니다.</div>
+        <div class="tip">📱 스마트폰에서는 왼쪽의 <b>⠿ 아이콘</b>을 잡고 위아래로 끌어야 순서가 자연스럽게 변경됩니다.</div>
         <button class="reset-btn" id="resetBtn">🔄 기본 일정으로 초기화</button>
         <div class="day-tabs" id="dayTabs"></div>
         <div class="daylabel-bar">
@@ -255,7 +256,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-    // 💡 중요: 본인의 Firebase 리얼타임 데이터베이스 설정값을 입력해주세요.
+    // 본인의 Firebase 리얼타임 데이터베이스 설정값입니다.
 const firebaseConfig = {
   apiKey: "AIzaSyBIAE_sJNf5sFVjLx2gulASmKiE1gSfSk8",
   authDomain: "jeju-ce6de.firebaseapp.com",
@@ -266,7 +267,6 @@ const firebaseConfig = {
   appId: "1:592376893914:web:685b1b20d4d297dad070e3",
   measurementId: "G-ZMEERVJQ7Z"
 };
-
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const rootRef = ref(db, "trips/family_dashboard");
@@ -288,7 +288,7 @@ const firebaseConfig = {
 </script>
 
 <script>
-// 사용자 요청: 식당, 카페, 놀거리 원본 데이터 백업 및 복원 완료
+// 원본 식당, 카페, 놀거리 35개 마스터 데이터 복원 완료
 var PLACES = [
     {id:'p1',cat:'play',name:'협재해수욕장',desc:'비양도 뷰 에메랄드 해변, 숙소 인근',addr:'제주시 한림읍 협재리 2497-1'},
     {id:'p2',cat:'play',name:'금능해수욕장',desc:'협재보다 한적한 가족 해변',addr:'제주시 한림읍 금능리'},
@@ -507,7 +507,6 @@ function renderDayTabs(){
 function switchDay(idx){ currentDay=idx; renderSchedule(); syncDayLabelInput(); }
 function syncDayLabelInput(){ var el=document.getElementById('dayLabelInput'); if(el) el.value=state.dayLabels[currentDay]||''; }
 
-// 🛠️ 대대적 수정: 드래그 앤 드롭 완벽 구동 전용 렌더러 구현
 function renderSchedule(){
     renderDayTabs();
     var box=document.getElementById('scheduleDays'); if(!box) return;
@@ -524,7 +523,7 @@ function renderSchedule(){
         var p = (it.id==='arrive'||it.id==='checkin'||it.id==='finish') ? it : (getPlace(it.id)||{name:'(삭제됨)',cat:'play',addr:''});
         var name=it.name||p.name; var cat=it.cat||p.cat; var addr=it.addr||p.addr;
         
-        inner += '<li class="sched-item '+cat+'" draggable="true" data-idx="'+idx+'">'+
+        inner += '<li class="sched-item '+cat+'" data-idx="'+idx+'">'+
             '<span class="drag-handle">⠿</span>'+
             '<input class="time-input" type="text" value="'+it.t+'" onchange="updateTime('+di+','+idx+',this.value)">'+
             '<div class="info"><h4>'+name+'</h4><small>📍 '+addr+'</small></div>'+
@@ -609,46 +608,34 @@ function saveRent(){
     pushToCloud(); flash('rentMsg','✅ 렌트카 정보 Realtime DB 저장 완료!');
 }
 
-// 🛠️ 대대적 수정: Realtime DB 덮어쓰기 싱크를 연동한 드래그 앤 드롭 트리거 핸들러
+// 📱 PC 마우스 및 스마트폰 터치를 동시 지원하는 멀티 드래그 핵심 함수
 function setupDragAndDrop(){
     var list = document.getElementById('sortableList'); if(!list) return;
-    var items = list.getElementsByClassName('sched-item');
-    var dragEl = null;
 
-    for(var i=0; i<items.length; i++){
-        var item = items[i];
-        item.addEventListener('dragstart', function(e){
-            dragEl = this; 
-            this.classList.add('dragging'); 
-            e.dataTransfer.effectAllowed = 'move';
-        });
+    // SortableJS 인스턴스를 생성하여 멀티플랫폼 드래그앤드롭 강제 바인딩
+    Sortable.create(list, {
+        animation: 150,         // 정렬될 때 자연스러운 롤링 애니메이션 (150ms)
+        handle: '.drag-handle',  // 💡 중요: 오직 '⠿' 버튼을 잡고 끌 때만 드래그 작동 (모바일 스크롤 충돌 방지)
+        ghostClass: 'dragging',  // 드래그 중인 임시 대상 카드 디자인 클래스
         
-        item.addEventListener('dragover', function(e){
-            e.preventDefault(); 
-            e.dataTransfer.dropEffect = 'move';
-            var target = e.target.closest('.sched-item');
-            if(target && target !== dragEl){
-                var rect = target.getBoundingClientRect();
-                var next = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-                list.insertBefore(dragEl, next ? target.nextSibling : target);
-            }
-        });
-        
-        item.addEventListener('dragend', function(){
-            this.classList.remove('dragging');
+        onEnd: function(evt) {
             var newItems = list.getElementsByClassName('sched-item');
             var newSched = [];
+            
+            // 변경된 DOM 배치 순서대로 기존 데이터셋을 복원 추적
             for(var j=0; j<newItems.length; j++){
                 var oldIdx = parseInt(newItems[j].getAttribute('data-idx'));
                 newSched.push(state.schedule[currentDay][oldIdx]);
             }
-            state.schedule[currentDay] = newSched;
             
-            // 데이터 추출 순서 정렬 직후 Realtime DB 동기화 강제 전송
+            // 상태 갱신 및 파이어베이스 클라우드로 즉시 업로드
+            state.schedule[currentDay] = newSched;
             pushToCloud(); 
-            setTimeout(renderSchedule, 100);
-        });
-    }
+            
+            // 데이터 변경에 따라 인덱스(data-idx)를 일괄 정렬 리렌더링
+            setTimeout(renderSchedule, 50);
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function(){
