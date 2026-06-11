@@ -2,127 +2,128 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>실시간 여행 플래너 대시보드</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>실시간 모바일 플래너</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <style>
+        /* 모바일 스크롤 바 숨김 및 터치 최적화 */
+        body { -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        /* 드래그할 때 움직이는 타겟 스타일 */
+        .sortable-ghost { opacity: 0.4; background-color: #e0e7ff !important; }
+    </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800">
+<body class="bg-gray-50 text-gray-800 antialiased pb-24 md:pb-0 md:pt-16">
 
-    <div class="flex h-screen overflow-hidden">
-        <div class="w-64 bg-slate-900 text-white flex flex-col justify-between">
-            <div class="p-5">
-                <h1 class="text-xl font-bold tracking-wider mb-8 text-indigo-400">
-                    <i class="fa-solid fa-map-location-dot mr-2"></i>Our Travel
-                </h1>
-                <nav class="space-y-2">
-                    <button onclick="switchTab('basic')" id="tab-btn-basic" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg bg-indigo-600 text-white transition">
-                        <i class="fa-solid fa-info-circle w-5"></i><span>기본 정보 & 항공</span>
-                    </button>
-                    <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                        <i class="fa-solid fa-calendar-days w-5"></i><span>상세 일정 (일차별)</span>
-                    </button>
-                    <button onclick="switchTab('stay-rent')" id="tab-btn-stay-rent" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                        <i class="fa-solid fa-hotel w-5"></i><span>숙소 & 렌트카</span>
-                    </button>
-                    <button onclick="switchTab('places')" id="tab-btn-places" class="tab-btn w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                        <i class="fa-solid fa-utensils w-5"></i><span>식당·카페·놀거리</span>
-                    </button>
-                </nav>
+    <header class="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 h-16 px-4 flex justify-between items-center z-40 shadow-sm">
+        <h1 class="text-lg font-bold text-gray-900 tracking-tight">
+            <i class="fa-solid fa-paper-plane text-indigo-500 mr-1"></i> Our Travel Plan
+        </h1>
+        <button onclick="saveAllData()" class="bg-indigo-600 active:bg-indigo-700 text-white font-medium text-sm px-4 py-2 rounded-xl shadow-sm transition flex items-center space-x-1">
+            <i class="fa-solid fa-cloud-arrow-up text-xs"></i> <span>저장/공유</span>
+        </button>
+    </header>
+
+    <main class="max-w-md mx-auto pt-20 px-4 pb-8 md:max-w-2xl">
+        
+        <div id="tab-basic" class="tab-content space-y-5">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">📍 여행 개요</h3>
+                <div class="space-y-3">
+                    <div>
+                        <input type="text" id="trip-title" class="w-full bg-gray-50 border-0 rounded-xl p-3 text-base font-medium focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="여행 제목을 입력하세요">
+                    </div>
+                    <div>
+                        <input type="text" id="trip-dates" class="w-full bg-gray-50 border-0 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="여행 일정 (예: 7/10 ~ 7/17)">
+                    </div>
+                </div>
             </div>
-            <div class="p-5 bg-slate-950 text-xs text-center text-slate-500">
-                <span class="text-emerald-400 animate-pulse">●</span> 실시간 동기화 활성화됨
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">🛫 항공권 정보</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">출발 편</label>
+                        <textarea id="flight-departure" rows="2" class="w-full bg-gray-50 border-0 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="편명, 시간 등 입력"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-gray-500 mb-1">귀국 편</label>
+                        <textarea id="flight-return" rows="2" class="w-full bg-gray-50 border-0 rounded-xl p-3 text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="편명, 시간 등 입력"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="flex-1 flex flex-col overflow-y-auto">
-            <header class="bg-white shadow-sm px-8 py-4 flex justify-between items-center sticky top-0 z-10">
-                <h2 id="current-tab-title" class="text-2xl font-bold text-slate-800">기본 정보 & 항공권</h2>
-                <button onclick="saveAllData()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition flex items-center space-x-2">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> <span>클라우드 저장</span>
+        <div id="tab-schedule" class="tab-content hidden space-y-4">
+            <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-gray-400"><i class="fa-solid fa-sort mr-1"></i>아이콘(☰)을 길게 눌러 드래그하세요.</span>
+                <button onclick="addDayBlock()" class="text-xs bg-indigo-50 text-indigo-600 font-semibold px-3 py-1.5 rounded-lg active:bg-indigo-100">
+                    + 일차 추가
                 </button>
-            </header>
-
-            <main class="p-8 max-w-5xl w-full mx-auto space-y-6">
-
-                <div id="tab-basic" class="tab-content block space-y-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h3 class="text-lg font-bold mb-4 text-slate-700 border-b pb-2">✈️ 여행 기본 개요</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-500 mb-1">여행 제목</label>
-                                <input type="text" id="trip-title" class="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-400 outline-none" placeholder="예: 낭만의 파리 일주일 여행">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-500 mb-1">여행 날짜</label>
-                                <input type="text" id="trip-dates" class="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-400 outline-none" placeholder="예: 2026.07.10 ~ 2026.07.17">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h3 class="text-lg font-bold mb-4 text-slate-700 border-b pb-2">🛫 항공권 정보</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-500 mb-1">출발 편 (편명 / 시간)</label>
-                                <textarea id="flight-departure" rows="3" class="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-400 outline-none" placeholder="예: 대한항공 KE901&#10;인천(ICN) 13:20 -> 파리(CDG) 18:30"></textarea>
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-500 mb-1">귀국 편 (편명 / 시간)</label>
-                                <textarea id="flight-return" rows="3" class="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-indigo-400 outline-none" placeholder="예: 에어프랑스 AF264&#10;파리(CDG) 21:00 -> 인천(ICN) 15:45"></textarea>
-                            </div>
-                        </div>
-                    </div>
+            </div>
+            
+            <div id="schedule-container" class="space-y-3">
                 </div>
-
-                <div id="tab-schedule" class="tab-content hidden space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm text-slate-500">일차별 세부 타임라인을 입력하세요.</span>
-                        <button onclick="addDayBlock()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-                            <i class="fa-solid fa-plus mr-1"></i> 일차(+1 Day) 추가
-                        </button>
-                    </div>
-                    <div id="schedule-container" class="space-y-4">
-                        </div>
-                </div>
-
-                <div id="tab-stay-rent" class="tab-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col">
-                        <div class="flex justify-between items-center mb-4 border-b pb-2">
-                            <h3 class="text-lg font-bold text-slate-700">🏨 숙소 정보</h3>
-                            <button onclick="addStayItem()" class="text-indigo-600 hover:text-indigo-800 text-sm font-bold"><i class="fa-solid fa-circle-plus"></i> 추가</button>
-                        </div>
-                        <div id="stay-container" class="space-y-4 flex-1"></div>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col">
-                        <div class="flex justify-between items-center mb-4 border-b pb-2">
-                            <h3 class="text-lg font-bold text-slate-700">🚗 렌트카 / 교통</h3>
-                            <button onclick="addRentItem()" class="text-indigo-600 hover:text-indigo-800 text-sm font-bold"><i class="fa-solid fa-circle-plus"></i> 추가</button>
-                        </div>
-                        <div id="rent-container" class="space-y-4 flex-1"></div>
-                    </div>
-                </div>
-
-                <div id="tab-places" class="tab-content hidden space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm text-slate-500">가고 싶은 식당, 카페, 명소 등을 리스트업 해보세요.</span>
-                        <button onclick="addPlaceItem()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition">
-                            <i class="fa-solid fa-plus mr-1"></i> 장소 추가
-                        </button>
-                    </div>
-                    <div id="places-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        </div>
-                </div>
-
-            </main>
         </div>
+
+        <div id="tab-stay-rent" class="tab-content hidden space-y-6">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">🏨 숙소</h3>
+                    <button onclick="addStayItem()" class="text-xs text-indigo-600 font-bold">+ 추가</button>
+                </div>
+                <div id="stay-container" class="space-y-3"></div>
+            </div>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-sm font-semibold text-gray-400 uppercase tracking-wider">🚗 교통 / 렌트카</h3>
+                    <button onclick="addRentItem()" class="text-xs text-indigo-600 font-bold">+ 추가</button>
+                </div>
+                <div id="rent-container" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <div id="tab-places" class="tab-content hidden space-y-4">
+            <div class="flex justify-between items-center px-1">
+                <span class="text-xs text-gray-400">가고 싶은 핫플레이스 리스트</span>
+                <button onclick="addPlaceItem()" class="text-xs bg-indigo-50 text-indigo-600 font-semibold px-3 py-1.5 rounded-lg active:bg-indigo-100">
+                    + 장소 추가
+                </button>
+            </div>
+            <div id="places-container" class="space-y-3">
+                </div>
+        </div>
+
+    </main>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2 flex justify-around items-center z-50 shadow-[0_-2px_10px_rgba(0,0,0,0.03)] md:top-16 md:bottom-auto md:border-b md:border-t-0 md:shadow-none">
+        <button onclick="switchTab('basic')" id="tab-btn-basic" class="tab-btn flex flex-col items-center space-y-1 py-1 px-3 text-indigo-600">
+            <i class="fa-solid fa-circle-info text-lg"></i>
+            <span class="text-[10px] font-medium">정보/항공</span>
+        </button>
+        <button onclick="switchTab('schedule')" id="tab-btn-schedule" class="tab-btn flex flex-col items-center space-y-1 py-1 px-3 text-gray-400">
+            <i class="fa-solid fa-route text-lg"></i>
+            <span class="text-[10px] font-medium">상세일정</span>
+        </button>
+        <button onclick="switchTab('stay-rent')" id="tab-btn-stay-rent" class="tab-btn flex flex-col items-center space-y-1 py-1 px-3 text-gray-400">
+            <i class="fa-solid fa-bed text-lg"></i>
+            <span class="text-[10px] font-medium">숙소/차</span>
+        </button>
+        <button onclick="switchTab('places')" id="tab-btn-places" class="tab-btn flex flex-col items-center space-y-1 py-1 px-3 text-gray-400">
+            <i class="fa-solid fa-heart text-lg"></i>
+            <span class="text-[10px] font-medium">핫플들</span>
+        </button>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // TODO: 본인의 Firebase 프로젝트 설정값으로 반드시 변경하세요!
-        const firebaseConfig = {
+        // 본인의 Firebase 정보 입력 필수!
+      const firebaseConfig = {
   apiKey: "AIzaSyBIAE_sJNf5sFVjLx2gulASmKiE1gSfSk8",
   authDomain: "jeju-ce6de.firebaseapp.com",
   databaseURL: "https://jeju-ce6de-default-rtdb.firebaseio.com",
@@ -133,14 +134,12 @@
   measurementId: "G-ZMEERVJQ7Z"
 	};
 
-        // Firebase 초기화
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        // 문서 레포지토리 고정 주소 (하나의 여행 계획 공유방 예시)
         const docRef = doc(db, "travelPlans", "shared-dashboard");
 
-        // 전역 함수로 노출 (HTML onclick 바인딩용)
+        // 전역 함수 연결
         window.switchTab = switchTab;
         window.addDayBlock = addDayBlock;
         window.deleteDayBlock = deleteDayBlock;
@@ -152,98 +151,88 @@
         window.deletePlaceItem = deletePlaceItem;
         window.saveAllData = saveAllData;
 
-        // 탭 전환 시스템
+        // 탭 바 전환 기능
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('block'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-            document.getElementById(`tab-${tabId}`).classList.add('block');
-
-            const titles = {
-                basic: '기본 정보 & 항공권',
-                schedule: '상세 일정 (일차별)',
-                'stay-rent': '숙소 & 렌트카',
-                places: '식당 · 카페 · 놀거리'
-            };
-            document.getElementById('current-tab-title').innerText = titles[tabId];
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-indigo-600', 'text-white');
-                btn.classList.add('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+                btn.classList.remove('text-indigo-600');
+                btn.classList.add('text-gray-400');
             });
-            document.getElementById(`tab-btn-${tabId}`).classList.add('bg-indigo-600', 'text-white');
-            document.getElementById(`tab-btn-${tabId}`).classList.remove('text-slate-400', 'hover:bg-slate-800', 'hover:text-white');
+            document.getElementById(`tab-btn-${tabId}`).classList.add('text-indigo-600');
+            document.getElementById(`tab-btn-${tabId}`).classList.remove('text-gray-400');
         }
 
-        // --- 동적 UI 추가 및 삭제 로직 ---
+        // --- 상세 일정 탭 전용 드래그 앤 드롭 이니셜라이저 ---
+        const el = document.getElementById('schedule-container');
+        Sortable.create(el, {
+            handle: '.drag-handle', // ☰ 아이콘을 잡아야만 드래그 가능하게 설정 (입력 시 튕김 방지)
+            animation: 150,
+            ghostClass: 'sortable-ghost'
+        });
+
+        // --- 템플릿 생성기 (동적 UI 구성) ---
         function addDayBlock(dayData = { day: '', plan: '' }) {
             const container = document.getElementById('schedule-container');
-            const dayId = Date.now() + Math.random().toString(36).substr(2, 5);
             const html = `
-                <div class="day-card bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex space-x-4 items-start" data-id="${dayId}">
-                    <div class="w-24">
-                        <input type="text" class="day-title font-bold text-indigo-600 border-b border-transparent hover:border-slate-300 focus:border-indigo-500 w-full outline-none py-1" value="${dayData.day || '1일차'}" placeholder="예: 1일차">
+                <div class="day-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-start space-x-3">
+                    <div class="drag-handle text-gray-300 py-2 px-1 cursor-grab active:cursor-grabbing text-base">
+                        <i class="fa-solid fa-bars"></i>
+                    </div>
+                    <div class="w-16">
+                        <input type="text" class="day-title font-bold text-indigo-600 bg-transparent text-sm w-full outline-none border-b border-transparent focus:border-indigo-500 py-1" value="${dayData.day || '1일차'}">
                     </div>
                     <div class="flex-1">
-                        <textarea class="day-plan w-full border rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-400 outline-none" rows="3" placeholder="시간별 세부 동선이나 일정을 메모하세요...">${dayData.plan || ''}</textarea>
+                        <textarea class="day-plan w-full bg-gray-50 border-0 text-xs p-2.5 rounded-xl outline-none focus:ring-1 focus:ring-indigo-500 resize-none" rows="2" placeholder="일정을 적어보세요">${dayData.plan || ''}</textarea>
                     </div>
-                    <button onclick="deleteDayBlock('${dayId}')" class="text-slate-400 hover:text-red-500 p-1 transition"><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-            `;
+                    <button onclick="deleteDayBlock(this)" class="text-gray-300 hover:text-red-400 py-2 px-1"><i class="fa-solid fa-xmark"></i></button>
+                </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
-        function deleteDayBlock(id) {
-            document.querySelector(`[data-id="${id}"]`)?.remove();
-        }
+        function deleteDayBlock(btn) { btn.closest('.day-card').remove(); }
 
         function addStayItem(data = { name: '', memo: '' }) {
             const container = document.getElementById('stay-container');
-            const id = Date.now() + Math.random().toString(36).substr(2, 5);
             const html = `
-                <div class="stay-item border p-3 rounded-lg bg-slate-50 flex flex-col space-y-2 relative group" data-id="${id}">
-                    <button onclick="deleteStayItem('${id}')" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-xmark"></i></button>
-                    <input type="text" class="stay-name font-semibold text-sm border-b bg-transparent outline-none py-0.5 focus:border-indigo-500" value="${data.name || ''}" placeholder="숙소명 (체크인/아웃 날짜)">
-                    <textarea class="stay-memo text-xs text-slate-600 bg-transparent outline-none resize-none" rows="2" placeholder="예약번호, 주소, 체크인 옵션 등">${data.memo || ''}</textarea>
+                <div class="stay-item bg-gray-50 p-3.5 rounded-xl border border-gray-100 flex flex-col space-y-2 relative">
+                    <button onclick="this.closest('.stay-item').remove()" class="absolute top-3 right-3 text-gray-300"><i class="fa-solid fa-xmark"></i></button>
+                    <input type="text" class="stay-name text-sm font-bold bg-transparent outline-none border-b border-transparent focus:border-indigo-500 pr-6" value="${data.name || ''}" placeholder="숙소명 및 체크인날짜">
+                    <textarea class="stay-memo text-xs text-gray-500 bg-transparent outline-none resize-none" rows="1" placeholder="메모 (예약번호, 주소 등)">${data.memo || ''}</textarea>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
-        function deleteStayItem(id) { document.querySelector(`[data-id="${id}"]`)?.remove(); }
 
         function addRentItem(data = { name: '', memo: '' }) {
             const container = document.getElementById('rent-container');
-            const id = Date.now() + Math.random().toString(36).substr(2, 5);
             const html = `
-                <div class="rent-item border p-3 rounded-lg bg-slate-50 flex flex-col space-y-2 relative group" data-id="${id}">
-                    <button onclick="deleteRentItem('${id}')" class="absolute top-2 right-2 text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fa-solid fa-xmark"></i></button>
-                    <input type="text" class="rent-name font-semibold text-sm border-b bg-transparent outline-none py-0.5 focus:border-indigo-500" value="${data.name || ''}" placeholder="교통수단/업체명">
-                    <textarea class="rent-memo text-xs text-slate-600 bg-transparent outline-none resize-none" rows="2" placeholder="인수/반납 장소, 시간, 예약번호 등">${data.memo || ''}</textarea>
+                <div class="rent-item bg-gray-50 p-3.5 rounded-xl border border-gray-100 flex flex-col space-y-2 relative">
+                    <button onclick="this.closest('.rent-item').remove()" class="absolute top-3 right-3 text-gray-300"><i class="fa-solid fa-xmark"></i></button>
+                    <input type="text" class="rent-name text-sm font-bold bg-transparent outline-none border-b border-transparent focus:border-indigo-500 pr-6" value="${data.name || ''}" placeholder="렌트카/교통수단">
+                    <textarea class="rent-memo text-xs text-gray-500 bg-transparent outline-none resize-none" rows="1" placeholder="메모 (픽업 장소, 예약번호)">${data.memo || ''}</textarea>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
-        function deleteRentItem(id) { document.querySelector(`[data-id="${id}"]`)?.remove(); }
 
         function addPlaceItem(data = { type: '식당', name: '', memo: '' }) {
             const container = document.getElementById('places-container');
-            const id = Date.now() + Math.random().toString(36).substr(2, 5);
             const html = `
-                <div class="place-card bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col space-y-2 relative" data-id="${id}">
-                    <button onclick="deletePlaceItem('${id}')" class="absolute top-4 right-4 text-slate-400 hover:text-red-500 transition"><i class="fa-solid fa-trash-can"></i></button>
+                <div class="place-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col space-y-2 relative">
+                    <button onclick="this.closest('.place-card').remove()" class="absolute top-4 right-4 text-gray-300"><i class="fa-solid fa-xmark"></i></button>
                     <div class="flex space-x-2">
-                        <select class="place-type border text-sm rounded px-2 py-1 bg-slate-50 outline-none">
+                        <select class="place-type bg-gray-50 text-xs rounded-lg px-2 py-1 outline-none font-medium">
                             <option value="식당" ${data.type === '식당' ? 'selected' : ''}>🍴 식당</option>
                             <option value="카페" ${data.type === '카페' ? 'selected' : ''}>☕ 카페</option>
-                            <option value="놀거리" ${data.type === '놀거리' ? 'selected' : ''}>🎡 놀거리/명소</option>
+                            <option value="놀거리" ${data.type === '놀거리' ? 'selected' : ''}>🎡 놀거리</option>
                         </select>
-                        <input type="text" class="place-name border-b flex-1 font-bold outline-none focus:border-indigo-500 px-1 text-sm" value="${data.name || ''}" placeholder="장소 명칭">
+                        <input type="text" class="place-name border-b border-transparent focus:border-indigo-500 flex-1 font-bold outline-none px-1 text-sm pr-6" value="${data.name || ''}" placeholder="장소명">
                     </div>
-                    <textarea class="place-memo text-xs border rounded p-2 focus:ring-1 focus:ring-indigo-400 outline-none" rows="2" placeholder="추천 메뉴, 구글맵 링크, 예산 등 입력">${data.memo || ''}</textarea>
+                    <textarea class="place-memo text-xs text-gray-500 bg-gray-50 rounded-xl p-2.5 outline-none focus:ring-1 focus:ring-indigo-500" rows="2" placeholder="메뉴 추천, 구글맵 링크 등">${data.memo || ''}</textarea>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
-        function deletePlaceItem(id) { document.querySelector(`[data-id="${id}"]`)?.remove(); }
 
-
-        // --- 데이터 수집 및 Firestore 저장 로직 ---
+        // --- 데이터 추출 및 업로드 ---
         async function saveAllData() {
             try {
                 const schedule = [];
@@ -279,65 +268,50 @@
                     });
                 });
 
-                const fullData = {
+                await setDoc(docRef, {
                     title: document.getElementById('trip-title').value,
                     dates: document.getElementById('trip-dates').value,
                     flightDeparture: document.getElementById('flight-departure').value,
                     flightReturn: document.getElementById('flight-return').value,
-                    schedule: schedule,
-                    stays: stays,
-                    rents: rents,
-                    places: places,
+                    schedule, stays, rents, places,
                     updatedAt: new Date().toISOString()
-                };
-
-                await setDoc(docRef, fullData);
-                alert("✨ 클라우드에 성공적으로 저장 및 공유되었습니다!");
+                });
+                alert("💾 클라우드 저장 완료!");
             } catch (error) {
-                console.error("데이터 저장 오류:", error);
-                alert("저장에 실패했습니다. 콘솔 창의 에러 메시지를 확인하세요.");
+                console.error(error);
+                alert("저장 실패. 콘솔을 확인하세요.");
             }
         }
 
-        // --- Realtime 데이터 구독 (수정 사항 즉시 반영) ---
+        // --- 리얼타임 리스너 ---
         onSnapshot(docRef, (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 
-                // 기본 정보 복원 (현재 활성화된 입력필드가 아닐 때만 텍스트 갱신 유도하여 타이핑 끊김 방지)
-                if(document.activeElement !== document.getElementById('trip-title')) document.getElementById('trip-title').value = data.title || '';
-                if(document.activeElement !== document.getElementById('trip-dates')) document.getElementById('trip-dates').value = data.dates || '';
-                if(document.activeElement !== document.getElementById('flight-departure')) document.getElementById('flight-departure').value = data.flightDeparture || '';
-                if(document.activeElement !== document.getElementById('flight-return')) document.getElementById('flight-return').value = data.flightReturn || '';
+                // 포커싱 상태 체크용 필드 동기화 보호 (타이핑 시 끊김 방지)
+                const active = document.activeElement;
+                if(active !== document.getElementById('trip-title')) document.getElementById('trip-title').value = data.title || '';
+                if(active !== document.getElementById('trip-dates')) document.getElementById('trip-dates').value = data.dates || '';
+                if(active !== document.getElementById('flight-departure')) document.getElementById('flight-departure').value = data.flightDeparture || '';
+                if(active !== document.getElementById('flight-return')) document.getElementById('flight-return').value = data.flightReturn || '';
 
-                // 현재 사용자가 인풋을 수정하고 있지 않을 때만 전체 DOM을 새로 렌더링합니다.
-                if (!document.activeElement || document.activeElement.tagName === 'BODY' || document.activeElement.tagName === 'BUTTON') {
-                    // 일정 복원
-                    const schedContainer = document.getElementById('schedule-container');
-                    schedContainer.innerHTML = '';
+                // 사용자가 폼을 활발히 입력 중이지 않을 때만 실시간 업데이트 수신 적용
+                if (!active || active.tagName === 'BODY' || active.tagName === 'BUTTON') {
+                    document.getElementById('schedule-container').innerHTML = '';
                     if(data.schedule) data.schedule.forEach(item => addDayBlock(item));
 
-                    // 숙소 복원
-                    const stayContainer = document.getElementById('stay-container');
-                    stayContainer.innerHTML = '';
+                    document.getElementById('stay-container').innerHTML = '';
                     if(data.stays) data.stays.forEach(item => addStayItem(item));
 
-                    // 렌트카 복원
-                    const rentContainer = document.getElementById('rent-container');
-                    rentContainer.innerHTML = '';
+                    document.getElementById('rent-container').innerHTML = '';
                     if(data.rents) data.rents.forEach(item => addRentItem(item));
 
-                    // 장소 리스트 복원
-                    const placeContainer = document.getElementById('places-container');
-                    placeContainer.innerHTML = '';
+                    document.getElementById('places-container').innerHTML = '';
                     if(data.places) data.places.forEach(item => addPlaceItem(item));
                 }
             } else {
-                // 데이터가 없을 때 초기 상태 구성
                 addDayBlock({ day: '1일차', plan: '' });
-                addStayItem();
-                addRentItem();
-                addPlaceItem();
+                addStayItem(); addRentItem(); addPlaceItem();
             }
         });
     </script>
