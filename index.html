@@ -120,15 +120,14 @@
 
         // 본인의 Firebase 정보 입력 필수!
         const firebaseConfig = {
-  apiKey: "AIzaSyBIAE_sJNf5sFVjLx2gulASmKiE1gSfSk8",
-  authDomain: "jeju-ce6de.firebaseapp.com",
-  databaseURL: "https://console.firebase.google.com/project/jeju-ce6de/database/jeju-ce6de-default-rtdb/data/~2F?hl=ko",
-  projectId: "jeju-ce6de",
-  storageBucket: "jeju-ce6de.firebasestorage.app",
-  messagingSenderId: "592376893914",
-  appId: "1:592376893914:web:685b1b20d4d297dad070e3",
-  measurementId: "G-ZMEERVJQ7Z"
-
+            apiKey: "AIzaSyBIAE_sJNf5sFVjLx2gulASmKiE1gSfSk8",
+            authDomain: "jeju-ce6de.firebaseapp.com",
+            projectId: "jeju-ce6de",
+            storageBucket: "jeju-ce6de.firebasestorage.app",
+            messagingSenderId: "592376893914",
+            appId: "1:592376893914:web:685b1b20d4d297dad070e3",
+            // ⚠️ 리얼타임 DB 사용 시 아래 databaseURL 주소가 정확히 들어가야 합니다!
+            databaseURL: "https://jeju-ce6de-default-rtdb.firebaseio.com/" 
         };
 
         const app = initializeApp(firebaseConfig);
