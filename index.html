@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>실시간 모바일 플래너</title>
+    <title>실시간 모바일 플래너 (Realtime DB)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <style>
-        /* 모바일 스크롤 바 숨김 및 터치 최적화 */
         body { -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        /* 드래그할 때 움직이는 타겟 스타일 */
         .sortable-ghost { opacity: 0.4; background-color: #e0e7ff !important; }
     </style>
 </head>
@@ -64,9 +62,7 @@
                     + 일차 추가
                 </button>
             </div>
-            
-            <div id="schedule-container" class="space-y-3">
-                </div>
+            <div id="schedule-container" class="space-y-3"></div>
         </div>
 
         <div id="tab-stay-rent" class="tab-content hidden space-y-6">
@@ -93,8 +89,7 @@
                     + 장소 추가
                 </button>
             </div>
-            <div id="places-container" class="space-y-3">
-                </div>
+            <div id="places-container" class="space-y-3"></div>
         </div>
 
     </main>
@@ -120,77 +115,65 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        // 🛠️ 리얼타임 데이터베이스용 라이브러리로 전면 교체되었습니다.
+        import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         // 본인의 Firebase 정보 입력 필수!
-      const firebaseConfig = {
+        const firebaseConfig = {
   apiKey: "AIzaSyBIAE_sJNf5sFVjLx2gulASmKiE1gSfSk8",
   authDomain: "jeju-ce6de.firebaseapp.com",
-  databaseURL: "https://jeju-ce6de-default-rtdb.firebaseio.com",
+  databaseURL: "https://console.firebase.google.com/project/jeju-ce6de/database/jeju-ce6de-default-rtdb/data/~2F?hl=ko",
   projectId: "jeju-ce6de",
   storageBucket: "jeju-ce6de.firebasestorage.app",
   messagingSenderId: "592376893914",
   appId: "1:592376893914:web:685b1b20d4d297dad070e3",
   measurementId: "G-ZMEERVJQ7Z"
-	};
 
+        };
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const docRef = doc(db, "travelPlans", "shared-dashboard");
+        const db = getDatabase(app);
+        const dbRef = ref(db, "travelPlans/shared-dashboard");
 
         // 전역 함수 연결
         window.switchTab = switchTab;
         window.addDayBlock = addDayBlock;
         window.deleteDayBlock = deleteDayBlock;
         window.addStayItem = addStayItem;
-        window.deleteStayItem = deleteStayItem;
         window.addRentItem = addRentItem;
-        window.deleteRentItem = deleteRentItem;
         window.addPlaceItem = addPlaceItem;
-        window.deletePlaceItem = deletePlaceItem;
         window.saveAllData = saveAllData;
 
-        // 탭 바 전환 기능
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('text-indigo-600');
-                btn.classList.add('text-gray-400');
+                btn.classList.remove('text-indigo-600'); btn.classList.add('text-gray-400');
             });
             document.getElementById(`tab-btn-${tabId}`).classList.add('text-indigo-600');
             document.getElementById(`tab-btn-${tabId}`).classList.remove('text-gray-400');
         }
 
-        // --- 상세 일정 탭 전용 드래그 앤 드롭 이니셜라이저 ---
+        // 드래그 앤 드롭 이니셜라이저
         const el = document.getElementById('schedule-container');
         Sortable.create(el, {
-            handle: '.drag-handle', // ☰ 아이콘을 잡아야만 드래그 가능하게 설정 (입력 시 튕김 방지)
+            handle: '.drag-handle',
             animation: 150,
             ghostClass: 'sortable-ghost'
         });
 
-        // --- 템플릿 생성기 (동적 UI 구성) ---
+        // UI 추가 삭제 함수들
         function addDayBlock(dayData = { day: '', plan: '' }) {
             const container = document.getElementById('schedule-container');
             const html = `
                 <div class="day-card bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-start space-x-3">
-                    <div class="drag-handle text-gray-300 py-2 px-1 cursor-grab active:cursor-grabbing text-base">
-                        <i class="fa-solid fa-bars"></i>
-                    </div>
-                    <div class="w-16">
-                        <input type="text" class="day-title font-bold text-indigo-600 bg-transparent text-sm w-full outline-none border-b border-transparent focus:border-indigo-500 py-1" value="${dayData.day || '1일차'}">
-                    </div>
-                    <div class="flex-1">
-                        <textarea class="day-plan w-full bg-gray-50 border-0 text-xs p-2.5 rounded-xl outline-none focus:ring-1 focus:ring-indigo-500 resize-none" rows="2" placeholder="일정을 적어보세요">${dayData.plan || ''}</textarea>
-                    </div>
-                    <button onclick="deleteDayBlock(this)" class="text-gray-300 hover:text-red-400 py-2 px-1"><i class="fa-solid fa-xmark"></i></button>
+                    <div class="drag-handle text-gray-300 py-2 px-1 cursor-grab active:cursor-grabbing text-base"><i class="fa-solid fa-bars"></i></div>
+                    <div class="w-16"><input type="text" class="day-title font-bold text-indigo-600 bg-transparent text-sm w-full outline-none border-b border-transparent focus:border-indigo-500 py-1" value="${dayData.day || '1일차'}"></div>
+                    <div class="flex-1"><textarea class="day-plan w-full bg-gray-50 border-0 text-xs p-2.5 rounded-xl outline-none focus:ring-1 focus:ring-indigo-500 resize-none" rows="2" placeholder="일정을 적어보세요">${dayData.plan || ''}</textarea></div>
+                    <button onclick="this.closest('.day-card').remove()" class="text-gray-300 hover:text-red-400 py-2 px-1"><i class="fa-solid fa-xmark"></i></button>
                 </div>`;
             container.insertAdjacentHTML('beforeend', html);
         }
-        function deleteDayBlock(btn) { btn.closest('.day-card').remove(); }
 
         function addStayItem(data = { name: '', memo: '' }) {
             const container = document.getElementById('stay-container');
@@ -232,43 +215,28 @@
             container.insertAdjacentHTML('beforeend', html);
         }
 
-        // --- 데이터 추출 및 업로드 ---
+        // --- 실시간 데이터 저장 (Realtime DB 규격) ---
         async function saveAllData() {
             try {
                 const schedule = [];
                 document.querySelectorAll('.day-card').forEach(card => {
-                    schedule.push({
-                        day: card.querySelector('.day-title').value,
-                        plan: card.querySelector('.day-plan').value
-                    });
+                    schedule.push({ day: card.querySelector('.day-title').value, plan: card.querySelector('.day-plan').value });
                 });
-
                 const stays = [];
                 document.querySelectorAll('.stay-item').forEach(item => {
-                    stays.push({
-                        name: item.querySelector('.stay-name').value,
-                        memo: item.querySelector('.stay-memo').value
-                    });
+                    stays.push({ name: item.querySelector('.stay-name').value, memo: item.querySelector('.stay-memo').value });
                 });
-
                 const rents = [];
                 document.querySelectorAll('.rent-item').forEach(item => {
-                    rents.push({
-                        name: item.querySelector('.rent-name').value,
-                        memo: item.querySelector('.rent-memo').value
-                    });
+                    rents.push({ name: item.querySelector('.rent-name').value, memo: item.querySelector('.rent-memo').value });
                 });
-
                 const places = [];
                 document.querySelectorAll('.place-card').forEach(card => {
-                    places.push({
-                        type: card.querySelector('.place-type').value,
-                        name: card.querySelector('.place-name').value,
-                        memo: card.querySelector('.place-memo').value
-                    });
+                    places.push({ type: card.querySelector('.place-type').value, name: card.querySelector('.place-name').value, memo: card.querySelector('.place-memo').value });
                 });
 
-                await setDoc(docRef, {
+                // Firestore의 setDoc 대신 Realtime DB의 set 함수를 사용합니다.
+                await set(dbRef, {
                     title: document.getElementById('trip-title').value,
                     dates: document.getElementById('trip-dates').value,
                     flightDeparture: document.getElementById('flight-departure').value,
@@ -276,26 +244,23 @@
                     schedule, stays, rents, places,
                     updatedAt: new Date().toISOString()
                 });
-                alert("💾 클라우드 저장 완료!");
+                alert("💾 클라우드 저장 성공!");
             } catch (error) {
                 console.error(error);
-                alert("저장 실패. 콘솔을 확인하세요.");
+                alert("저장 실패! 파이어베이스 설정이나 규칙을 확인하세요.");
             }
         }
 
-        // --- 리얼타임 리스너 ---
-        onSnapshot(docRef, (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                
-                // 포커싱 상태 체크용 필드 동기화 보호 (타이핑 시 끊김 방지)
+        // --- 실시간 데이터 불러오기 (Realtime DB 규격) ---
+        onValue(dbRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
                 const active = document.activeElement;
                 if(active !== document.getElementById('trip-title')) document.getElementById('trip-title').value = data.title || '';
                 if(active !== document.getElementById('trip-dates')) document.getElementById('trip-dates').value = data.dates || '';
                 if(active !== document.getElementById('flight-departure')) document.getElementById('flight-departure').value = data.flightDeparture || '';
                 if(active !== document.getElementById('flight-return')) document.getElementById('flight-return').value = data.flightReturn || '';
 
-                // 사용자가 폼을 활발히 입력 중이지 않을 때만 실시간 업데이트 수신 적용
                 if (!active || active.tagName === 'BODY' || active.tagName === 'BUTTON') {
                     document.getElementById('schedule-container').innerHTML = '';
                     if(data.schedule) data.schedule.forEach(item => addDayBlock(item));
@@ -310,6 +275,10 @@
                     if(data.places) data.places.forEach(item => addPlaceItem(item));
                 }
             } else {
+                document.getElementById('schedule-container').innerHTML = '';
+                document.getElementById('stay-container').innerHTML = '';
+                document.getElementById('rent-container').innerHTML = '';
+                document.getElementById('places-container').innerHTML = '';
                 addDayBlock({ day: '1일차', plan: '' });
                 addStayItem(); addRentItem(); addPlaceItem();
             }
