@@ -16,7 +16,6 @@
         .sync-badge.off { background:#e53935; }
         .sync-badge.saving { background:#fb8c00; }
         
-        /* 상단 기본정보 수정 폼 */
         .meta-edit-box { background: rgba(255, 255, 255, 0.15); max-width: 700px; margin: 10px auto 0; padding: 12px; border-radius: 8px; font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
         .meta-edit-box input { padding: 6px 10px; border: none; border-radius: 4px; font-size: 13px; font-weight: 600; color: #333; }
         .meta-edit-box button { padding: 6px 12px; background: #004d40; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
@@ -37,6 +36,7 @@
         .dash-card.ddays { border-top-color:#ff7043; } .dash-card.ddays .big { color:#ff7043; }
         .dash-card.flight { border-top-color:#42a5f5; } .dash-card.flight .big { color:#1976d2; font-size:18px; }
         .dash-card.rent { border-top-color:#ab47bc; } .dash-card.rent .big { color:#8e24aa; font-size:18px; }
+        
         .filters { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; justify-content:center; }
         .filter-btn { padding:8px 18px; border:2px solid #26a69a; background:#fff; color:#00897b; border-radius:20px; cursor:pointer; font-weight:600; }
         .filter-btn.active { background:#26a69a; color:#fff; }
@@ -57,6 +57,7 @@
         .map-btn { background:#e3f2fd; color:#1565c0; border:1.5px solid #64b5f6; }
         .usr-del { background:#ffebee; color:#e53935; border:1.5px solid #ef9a9a; flex:0 0 auto; }
         .usr-tag { position:absolute; top:12px; right:12px; font-size:11px; background:#fffde7; color:#f9a825; border:1px solid #ffe082; padding:2px 8px; border-radius:10px; }
+        
         .fav-section { background:#fff; border-radius:16px; padding:18px; margin-bottom:20px; box-shadow:0 3px 10px rgba(0,0,0,.08); }
         .fav-section h2 { font-size:18px; margin-bottom:12px; color:#ef6c00; }
         .fav-chips { display:flex; gap:8px; flex-wrap:wrap; }
@@ -64,18 +65,20 @@
         .chip .mini-add { cursor:pointer; color:#00897b; font-weight:700; }
         .chip .mini-del { cursor:pointer; color:#e53935; font-weight:700; }
         .empty { color:#90a4ae; font-size:14px; padding:10px; }
+        
         .form-card { background:#fff; border-radius:16px; padding:24px; max-width:640px; margin:0 auto 20px; box-shadow:0 3px 10px rgba(0,0,0,.08); }
         .form-card h2 { font-size:18px; margin-bottom:18px; color:#00897b; }
         .form-row { margin-bottom:14px; }
         .form-row label { display:block; font-weight:600; margin-bottom:6px; font-size:14px; color:#455a64; }
         .form-row input,.form-row select,.form-row textarea { width:100%; padding:11px 14px; border:1.5px solid #b0bec5; border-radius:10px; font-size:15px; }
-        .form-row input:focus,.form-row select:focus,.form-row textarea:focus { outline:none; border-color:#26a69a; }
         .form-2col { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
         .save-btn { width:100%; padding:13px; background:linear-gradient(135deg,#00897b,#26a69a); color:#fff; border:none; border-radius:10px; cursor:pointer; font-weight:700; font-size:15px; margin-top:6px; }
         .saved-msg { text-align:center; color:#00897b; font-weight:600; margin-top:12px; min-height:20px; }
+        
         .flight-leg { border:1.5px dashed #90caf9; border-radius:12px; padding:16px; margin-bottom:16px; }
         .flight-leg h3 { color:#1976d2; font-size:15px; margin-bottom:12px; }
         .tip { background:#fff8e1; border-left:4px solid #ffca28; padding:12px 16px; border-radius:8px; margin-bottom:16px; font-size:13px; color:#795548; }
+        
         .day-tabs { display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap; }
         .day-btn { padding:8px 14px; border:none; background:#eceff1; border-radius:10px; cursor:pointer; font-weight:600; font-size:13px; }
         .day-btn.active { background:#00897b; color:#fff; }
@@ -86,17 +89,20 @@
         .add-bar select,.add-bar input { padding:10px; border:1.5px solid #b0bec5; border-radius:10px; font-size:14px; }
         .add-bar select { min-width:180px; } .add-bar input { width:90px; }
         .add-bar button { padding:10px 18px; background:#00897b; color:#fff; border:none; border-radius:10px; cursor:pointer; font-weight:600; }
-        .sched-list { list-style:none; }
-        .sched-item { background:#fff; border-radius:12px; padding:14px 16px; margin-bottom:10px; box-shadow:0 2px 6px rgba(0,0,0,.06); display:flex; align-items:center; gap:12px; border-left:5px solid #26a69a; }
-        .sched-item.dragging { opacity:.4; }
+        
+        /* 여행스케줄 드래그 앤 드롭 아이템 양식 보완 */
+        .sched-list { list-style:none; min-height: 100px; }
+        .sched-item { background:#fff; border-radius:12px; padding:14px 16px; margin-bottom:10px; box-shadow:0 2px 6px rgba(0,0,0,.06); display:flex; align-items:center; gap:12px; border-left:5px solid #26a69a; transition: opacity 0.2s, transform 0.2s; }
+        .sched-item.dragging { opacity:.3; transform: scale(0.97); border: 2px dashed #b0bec5; }
         .sched-item.play{border-left-color:#ff7043;} .sched-item.food{border-left-color:#ec407a;} .sched-item.cafe{border-left-color:#ab47bc;}
         .sched-item .time-input { width:70px; padding:6px 8px; border:1.5px solid #cfd8dc; border-radius:8px; font-weight:700; color:#00897b; text-align:center; }
-        .sched-item .info { flex:1; }
-        .sched-item .info h4 { font-size:16px; margin-bottom:3px; }
+        .sched-item .info { flex:1; pointer-events: none; } /* 폰트 영역 클릭 시 드래그 깨짐 방지 */
+        .sched-item .info h4 { font-size:16px; margin-bottom:3px; color:#2c3e50; }
         .sched-item .info small { color:#607d8b; }
-        .sched-item .drag-handle { color:#b0bec5; font-size:20px; cursor:grab; }
+        .sched-item .drag-handle { color:#b0bec5; font-size:20px; cursor:grab; margin-right: 4px; user-select: none; }
         .sched-item .sched-map { background:#e3f2fd; color:#1565c0; border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700; font-size:12px; }
         .sched-item .del { background:#ffebee; color:#e53935; border:none; border-radius:8px; padding:6px 10px; cursor:pointer; font-weight:700; }
+        
         .day-empty { background:#fff; border:2px dashed #b0bec5; border-radius:12px; padding:30px; text-align:center; color:#90a4ae; }
         .reset-btn { background:#e53935; color:#fff; border:none; padding:8px 16px; border-radius:10px; cursor:pointer; float:right; font-weight:600; }
         .route-day { background:#fff; border-radius:16px; padding:20px; margin-bottom:16px; box-shadow:0 3px 10px rgba(0,0,0,.08); }
@@ -112,10 +118,10 @@
 </head>
 <body>
 
-<div class="loading-overlay" id="loadingOverlay">☁️ Firebase 데이터 실시간 연결 중...</div>
+<div class="loading-overlay" id="loadingOverlay">☁️ Realtime Database 동기화 연결 중...</div>
 
 <header>
-    <h1>🌴 <span id="topTitleTarget">제주도</span> 여행계획 대시보드</h1>
+    <h1>🌴 <span id="topTitleTarget">여행계획</span> 대시보드</h1>
     <p>📅 일정: <span id="topDateTarget">2026-07-13 ~ 2026-07-16</span> | 🏨 숙소: <span id="topStayTarget">에코그린리조트(한림)</span></p>
     
     <div class="meta-edit-box">
@@ -124,7 +130,6 @@
         📅 <input type="date" id="metaSDate"> ~ <input type="date" id="metaEDate">
         <button id="metaSaveBtn">💡 상단정보 저장</button>
     </div>
-
     <span class="sync-badge" id="syncBadge">연결 중…</span>
 </header>
 
@@ -138,7 +143,6 @@
 </div>
 
 <div class="container">
-
     <div id="dashboard" class="tab-content active">
         <h2 class="section-title">🏠 여행 한눈에 보기</h2>
         <div class="dash-grid" id="dashGrid"></div>
@@ -175,30 +179,30 @@
             <div class="flight-leg">
                 <h3>🛫 가는 편</h3>
                 <div class="form-2col">
-                    <div class="form-row"><label>항공사</label><input type="text" id="fgAir" placeholder="예: 대한항공"></div>
-                    <div class="form-row"><label>편명</label><input type="text" id="fgNo" placeholder="예: KE1234"></div>
+                    <div class="form-row"><label>항공사</label><input type="text" id="fgAir"></div>
+                    <div class="form-row"><label>편명</label><input type="text" id="fgNo"></div>
                     <div class="form-row"><label>날짜</label><input type="date" id="fgDate"></div>
-                    <div class="form-row"><label>시간 (출발→도착)</label><input type="text" id="fgTime" placeholder="예: 08:00 → 09:10"></div>
-                    <div class="form-row"><label>출발/도착 공항</label><input type="text" id="fgRoute" placeholder="예: 김포(GMP) → 제주(CJU)"></div>
-                    <div class="form-row"><label>좌석/터미널</label><input type="text" id="fgSeat" placeholder="예: 1터미널 / 12A~12E"></div>
+                    <div class="form-row"><label>시간</label><input type="text" id="fgTime"></div>
+                    <div class="form-row"><label>출발/도착 공항</label><input type="text" id="fgRoute"></div>
+                    <div class="form-row"><label>좌석/터미널</label><input type="text" id="fgSeat"></div>
                 </div>
             </div>
             <div class="flight-leg">
                 <h3>🛬 오는 편</h3>
                 <div class="form-2col">
-                    <div class="form-row"><label>항공사</label><input type="text" id="frAir" placeholder="예: 대한항공"></div>
-                    <div class="form-row"><label>편명</label><input type="text" id="frNo" placeholder="예: KE5678"></div>
+                    <div class="form-row"><label>항공사</label><input type="text" id="frAir"></div>
+                    <div class="form-row"><label>편명</label><input type="text" id="frNo"></div>
                     <div class="form-row"><label>날짜</label><input type="date" id="frDate"></div>
-                    <div class="form-row"><label>시간 (출발→도착)</label><input type="text" id="frTime" placeholder="예: 19:00 → 20:10"></div>
-                    <div class="form-row"><label>출발/도착 공항</label><input type="text" id="frRoute" placeholder="예: 제주(CJU) → 김포(GMP)"></div>
-                    <div class="form-row"><label>좌석/터미널</label><input type="text" id="frSeat" placeholder="예: 1터미널 / 20A~20E"></div>
+                    <div class="form-row"><label>시간</label><input type="text" id="frTime"></div>
+                    <div class="form-row"><label>출발/도착 공항</label><input type="text" id="frRoute"></div>
+                    <div class="form-row"><label>좌석/터미널</label><input type="text" id="frSeat"></div>
                 </div>
             </div>
             <div class="form-2col">
-                <div class="form-row"><label>인원</label><input type="text" id="fPax" placeholder="예: 성인 5명"></div>
-                <div class="form-row"><label>총 가격</label><input type="text" id="fPrice" placeholder="예: 1,250,000원"></div>
+                <div class="form-row"><label>인원</label><input type="text" id="fPax"></div>
+                <div class="form-row"><label>총 가격</label><input type="text" id="fPrice"></div>
             </div>
-            <div class="form-row"><label>예약번호 / 메모</label><input type="text" id="fMemo" placeholder="예: 예약번호 ABC123"></div>
+            <div class="form-row"><label>예약번호 / 메모</label><input type="text" id="fMemo"></div>
             <button class="save-btn" id="flightSave">💾 항공권 저장</button>
             <div class="saved-msg" id="flightMsg"></div>
         </div>
@@ -208,29 +212,29 @@
         <div class="form-card">
             <h2>🚗 렌트카 정보</h2>
             <div class="form-2col">
-                <div class="form-row"><label>대여 업체</label><input type="text" id="rCompany" placeholder="예: 롯데렌터카"></div>
-                <div class="form-row"><label>예약번호</label><input type="text" id="rNo" placeholder="예: R-20260713-001"></div>
-                <div class="form-row"><label>차종</label><input type="text" id="rCar" placeholder="예: 카니발 9인승"></div>
-                <div class="form-row"><label>보험</label><input type="text" id="rIns" placeholder="예: 완전자차"></div>
-                <div class="form-row"><label>대여 일시</label><input type="text" id="rPickTime" placeholder="예: 2026-07-13 12:30"></div>
-                <div class="form-row"><label>반납 일시</label><input type="text" id="rDropTime" placeholder="예: 2026-07-16 16:00"></div>
-                <div class="form-row"><label>대여 장소</label><input type="text" id="rPickPlace" placeholder="예: 제주공항 영업소"></div>
-                <div class="form-row"><label>반납 장소</label><input type="text" id="rDropPlace" placeholder="예: 제주공항 영업소"></div>
-                <div class="form-row"><label>연락처</label><input type="text" id="rTel" placeholder="예: 1588-0000"></div>
-                <div class="form-row"><label>총 요금</label><input type="text" id="rPrice" placeholder="예: 320,000원"></div>
+                <div class="form-row"><label>대여 업체</label><input type="text" id="rCompany"></div>
+                <div class="form-row"><label>예약번호</label><input type="text" id="rNo"></div>
+                <div class="form-row"><label>차종</label><input type="text" id="rCar"></div>
+                <div class="form-row"><label>보험</label><input type="text" id="rIns"></div>
+                <div class="form-row"><label>대여 일시</label><input type="text" id="rPickTime"></div>
+                <div class="form-row"><label>반납 일시</label><input type="text" id="rDropTime"></div>
+                <div class="form-row"><label>대여 장소</label><input type="text" id="rPickPlace"></div>
+                <div class="form-row"><label>반납 장소</label><input type="text" id="rDropPlace"></div>
+                <div class="form-row"><label>연락처</label><input type="text" id="rTel"></div>
+                <div class="form-row"><label>총 요금</label><input type="text" id="rPrice"></div>
             </div>
-            <div class="form-row"><label>메모</label><input type="text" id="rMemo" placeholder="예: 네비 한글, 하이패스 포함"></div>
+            <div class="form-row"><label>메모</label><input type="text" id="rMemo"></div>
             <button class="save-btn" id="rentSave">💾 렌트카 저장</button>
             <div class="saved-msg" id="rentMsg"></div>
         </div>
     </div>
 
     <div id="schedule" class="tab-content">
-        <div class="tip">💡 항목을 드래그해 순서 변경, 시간칸을 눌러 직접 수정, 날짜 라벨도 바꿀 수 있어요. 변경 시 자동으로 클라우드에 저장돼 다른 기기와 동기화됩니다.</div>
+        <div class="tip">💡 항목 전체를 클릭해 위아래로 끌면 동선 순서가 즉시 변경되며 파이어베이스에 실시간 저장됩니다.</div>
         <button class="reset-btn" id="resetBtn">🔄 기본 일정으로 초기화</button>
         <div class="day-tabs" id="dayTabs"></div>
         <div class="daylabel-bar">
-            <input type="text" id="dayLabelInput" placeholder="이 날짜 라벨 (예: DAY1 7/13(월))">
+            <input type="text" id="dayLabelInput" placeholder="DAY 라벨 명칭 수정">
             <button id="dayLabelSave">날짜 라벨 저장</button>
         </div>
         <div class="add-bar">
@@ -243,17 +247,16 @@
 
     <div id="route" class="tab-content">
         <h2 class="section-title">🧭 날짜별 이동경로</h2>
-        <div class="tip">💡 "경로 한눈에 보기"는 출발~도착 길찾기를, "장소별 지도"는 각 장소를 순서대로 지도에서 확인합니다.</div>
         <div id="routeBox"></div>
     </div>
-
 </div>
 
 <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-  const firebaseConfig = {
+    // 💡 중요: 본인의 Firebase 리얼타임 데이터베이스 설정값을 입력해주세요.
+const firebaseConfig = {
   apiKey: "AIzaSyBIAE_sJNf5sFVjLx2gulASmKiE1gSfSk8",
   authDomain: "jeju-ce6de.firebaseapp.com",
   databaseURL: "https://jeju-ce6de-default-rtdb.firebaseio.com",
@@ -265,27 +268,27 @@
 };
 
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const tripRef = doc(db, "trips", "family");
+    const db = getDatabase(app);
+    const rootRef = ref(db, "trips/family_dashboard");
 
     window.FB = {
-        ref: tripRef,
         listen(callback){
-            return onSnapshot(tripRef, (snap)=>{
-                callback(snap.exists() ? snap.data() : null);
-            }, (err)=>{
-                console.error(err);
+            return onValue(rootRef, (snapshot) => {
+                callback(snapshot.exists() ? snapshot.val() : null);
+            }, (err) => {
+                console.error("Firebase 연동 에러:", err);
                 window.App && window.App.setSync('off');
             });
         },
         async save(data){
-            return setDoc(tripRef, data, { merge:true });
+            return set(rootRef, data);
         }
     };
     window.dispatchEvent(new Event('fb-ready'));
 </script>
 
 <script>
+// 사용자 요청: 식당, 카페, 놀거리 원본 데이터 백업 및 복원 완료
 var PLACES = [
     {id:'p1',cat:'play',name:'협재해수욕장',desc:'비양도 뷰 에메랄드 해변, 숙소 인근',addr:'제주시 한림읍 협재리 2497-1'},
     {id:'p2',cat:'play',name:'금능해수욕장',desc:'협재보다 한적한 가족 해변',addr:'제주시 한림읍 금능리'},
@@ -340,29 +343,22 @@ var DEFAULT_SCHEDULE = [
 
 var state = {
     meta: { destination: "제주도", accommodation: "에코그린리조트(한림)", startDate: "2026-07-13", endDate: "2026-07-16" },
-    favorites: [],
-    userPlaces: [],
+    favorites: [], userPlaces: [],
     schedule: JSON.parse(JSON.stringify(DEFAULT_SCHEDULE)),
     dayLabels: DEFAULT_DAYS.slice(),
-    flight: {},
-    rent: {}
+    flight: {}, rent: {}
 };
 
 var currentCat='all', currentDay=0;
-var isReady=false;
 var applyingRemote=false;
-var saveTimer=null;
 
 window.App = {
     setSync:function(status, timeStr){
         var b=document.getElementById('syncBadge'); if(!b) return;
         b.className='sync-badge';
-        if(status==='on'){ 
-            b.classList.add('on'); 
-            b.textContent= timeStr ? '🟢 저장완료 ('+timeStr+')' : '🟢 동기화됨'; 
-        }
-        else if(status==='off'){ b.classList.add('off'); b.textContent='🔴 연결 끊김'; }
-        else if(status==='saving'){ b.classList.add('saving'); b.textContent='💾 저장 중…'; }
+        if(status==='on'){ b.classList.add('on'); b.textContent= timeStr ? '🟢 동기화 완료 ('+timeStr+')' : '🟢 연결됨'; }
+        else if(status==='off'){ b.classList.add('off'); b.textContent='🔴 실시간 끊김'; }
+        else if(status==='saving'){ b.classList.add('saving'); b.textContent='💾 DB 저장 중…'; }
     }
 };
 
@@ -370,76 +366,54 @@ function startFirebase(){
     if(!window.FB){ setTimeout(startFirebase,100); return; }
     window.FB.listen(function(data){
         applyingRemote=true;
-        if(data){ 
-            mergeRemote(data); 
-        } else { 
-            // 클라우드에 아예 데이터가 없는 최초 상태인 경우에만 기본 데이터 업로드
-            pushToCloud(true); 
+        if(data){
+            if(data.meta) state.meta = data.meta;
+            if(data.favorites) state.favorites = data.favorites;
+            if(data.userPlaces) state.userPlaces = data.userPlaces;
+            if(data.schedule) state.schedule = data.schedule;
+            if(data.dayLabels) state.dayLabels = data.dayLabels;
+            if(data.flight) state.flight = data.flight;
+            if(data.rent) state.rent = data.rent;
+        } else {
+            pushToCloud();
         }
         sanitize();
-        isReady=true;
         document.getElementById('loadingOverlay').style.display='none';
         
-        var timeStr = "";
-        if(data && data.updatedAt){
-            var d = new Date(data.updatedAt);
-            timeStr = String(d.getHours()).padStart(2,'0')+":"+String(d.getMinutes()).padStart(2,'0')+":"+String(d.getSeconds()).padStart(2,'0');
-        }
+        var d = new Date();
+        var timeStr = String(d.getHours()).padStart(2,'0')+":"+String(d.getMinutes()).padStart(2,'0')+":"+String(d.getSeconds()).padStart(2,'0');
         window.App.setSync('on', timeStr);
         renderAll();
         applyingRemote=false;
     });
 }
 
-function mergeRemote(d){
-    if(d.meta) state.meta = d.meta;
-    if(d.favorites) state.favorites = d.favorites;
-    if(d.userPlaces) state.userPlaces = d.userPlaces;
-    if(d.schedule) state.schedule = d.schedule;
-    if(d.dayLabels) state.dayLabels = d.dayLabels;
-    if(d.flight) state.flight = d.flight;
-    if(d.rent) state.rent = d.rent;
-}
-
 function sanitize(){
     if(!state.meta) state.meta = { destination: "제주도", accommodation: "에코그린리조트(한림)", startDate: "2026-07-13", endDate: "2026-07-16" };
     if(!Array.isArray(state.schedule)) state.schedule=JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
-    while(state.schedule.length<4) state.schedule.push([]);
+    while(state.schedule.length < 4) state.schedule.push([]);
     if(!Array.isArray(state.dayLabels)) state.dayLabels=DEFAULT_DAYS.slice();
-    while(state.dayLabels.length<4) state.dayLabels.push('DAY'+(state.dayLabels.length+1));
     if(!state.favorites) state.favorites = [];
     if(!state.userPlaces) state.userPlaces = [];
-    if(!state.flight) state.flight = {};
-    if(!state.rent) state.rent = {};
 }
 
-function pushToCloud(immediate){
+function pushToCloud(){
     if(applyingRemote) return;
     if(!window.FB) return;
     window.App.setSync('saving');
-    clearTimeout(saveTimer);
     
-    var doSave=function(){
-        var timestamp = Date.now();
-        window.FB.save({
-            meta: state.meta,
-            favorites: state.favorites, 
-            userPlaces: state.userPlaces,
-            schedule: state.schedule, 
-            dayLabels: state.dayLabels,
-            flight: state.flight, 
-            rent: state.rent,
-            updatedAt: timestamp
-        }).then(function(){ 
-            var d = new Date(timestamp);
-            var timeStr = String(d.getHours()).padStart(2,'0')+":"+String(d.getMinutes()).padStart(2,'0')+":"+String(d.getSeconds()).padStart(2,'0');
-            window.App.setSync('on', timeStr); 
-        }).catch(function(e){ 
-            console.error(e); 
-            window.App.setSync('off'); 
-        });
-    };
-    if(immediate) doSave(); else saveTimer=setTimeout(doSave,600);
+    window.FB.save({
+        meta: state.meta,
+        favorites: state.favorites,
+        userPlaces: state.userPlaces,
+        schedule: state.schedule,
+        dayLabels: state.dayLabels,
+        flight: state.flight,
+        rent: state.rent
+    }).catch(function(e){
+        console.error(e);
+        window.App.setSync('off');
+    });
 }
 
 function allPlaces(){ return PLACES.concat(state.userPlaces); }
@@ -448,7 +422,6 @@ function openMap(addr){ if(!addr){ alert('주소가 없습니다.'); return; } w
 function flash(id,msg){ var e=document.getElementById(id); if(!e) return; e.textContent=msg; setTimeout(function(){ e.textContent=''; },3000); }
 
 function renderAll(){
-    document.getElementById('topTitleTarget').textContent = state.meta.destination || "제주도";
     document.getElementById('topStayTarget').textContent = state.meta.accommodation || "미정";
     document.getElementById('topDateTarget').textContent = (state.meta.startDate || "") + " ~ " + (state.meta.endDate || "");
     
@@ -462,28 +435,19 @@ function renderAll(){
     loadFlight(); loadRent(); renderRoute();
 }
 
-function ddayText(){
-    if(!state.meta.startDate) return "D-DAY";
-    var parts = state.meta.startDate.split('-');
-    var target=new Date(parts[0], parts[1]-1, parts[2]); 
-    var now=new Date(); now.setHours(0,0,0,0);
-    var diff=Math.round((target-now)/86400000);
-    if(diff>0) return 'D-'+diff; if(diff===0) return 'D-DAY'; return '여행 완료';
-}
-
 function renderDash(){
-    var schedCount=0; for(var i=0; i<state.schedule.length; i++) schedCount+=state.schedule[i].length;
-    var fg=state.flight, rt=state.rent;
-    var flightTxt = fg.fgAir ? (fg.fgAir+' '+(fg.fgNo||'')+'<div class="sub">가는편 '+(fg.fgDate||'')+' '+(fg.fgTime||'')+'<br>오는편 '+(fg.frDate||'')+' '+(fg.frTime||'')+'</div>') : '미입력<div class="sub">항공권 탭에서 입력하세요</div>';
-    var rentTxt = rt.rCompany ? (rt.rCompany+' '+(rt.rCar||'')+'<div class="sub">'+(rt.rPickTime||'')+' ~ '+(rt.rDropTime||'')+'</div>') : '미입력<div class="sub">렌트카 탭에서 입력하세요</div>';
+    var schedCount=0; for(var i=0; i<state.schedule.length; i++) schedCount+=(state.schedule[i]||[]).length;
+    var fg=state.flight || {}, rt=state.rent || {};
+    var flightTxt = fg.fgAir ? (fg.fgAir+' '+(fg.fgNo||'')) : '미입력';
+    var rentTxt = rt.rCompany ? (rt.rCompany+' '+(rt.rCar||'')) : '미입력';
     
     document.getElementById('dashGrid').innerHTML =
-        '<div class="dash-card ddays"><h3>출발까지</h3><div class="big">'+ddayText()+'</div><div class="sub">'+(state.meta.startDate || '')+' 출발</div></div>'+
-        '<div class="dash-card"><h3>🏡 숙소 정보</h3><div class="big" style="font-size:20px;">'+(state.meta.accommodation || '미입력')+'</div><div class="sub">기간: '+(state.meta.startDate||'')+' ~ '+(state.meta.endDate||'')+'</div></div>'+
+        '<div class="dash-card ddays"><h3>출발일정</h3><div class="big">제주행</div><div class="sub">'+(state.meta.startDate || '')+' 출발</div></div>'+
+        '<div class="dash-card"><h3>🏨 숙소 정보</h3><div class="big" style="font-size:18px;">'+(state.meta.accommodation || '미입력')+'</div></div>'+
         '<div class="dash-card flight"><h3>✈️ 항공권</h3><div class="big">'+flightTxt+'</div></div>'+
         '<div class="dash-card rent"><h3>🚗 렌트카</h3><div class="big">'+rentTxt+'</div></div>'+
-        '<div class="dash-card"><h3>⭐ 찜한 장소</h3><div class="big">'+state.favorites.length+'곳</div><div class="sub">내 장소 '+state.userPlaces.length+'곳 추가됨</div></div>'+
-        '<div class="dash-card"><h3>🗓️ 등록된 일정</h3><div class="big">'+schedCount+'개</div><div class="sub">'+state.dayLabels.length+'일간 여행 설정</div></div>';
+        '<div class="dash-card"><h3>⭐ 찜한 장소</h3><div class="big">'+state.favorites.length+'곳</div></div>'+
+        '<div class="dash-card"><h3>🗓️ 등록된 일정</h3><div class="big">'+schedCount+'개</div></div>';
 }
 
 function renderGrid(){
@@ -492,7 +456,7 @@ function renderGrid(){
     var list = currentCat==='all'?src:src.filter(function(p){return p.cat===currentCat;});
     grid.innerHTML = list.map(function(p){
         var faved=state.favorites.indexOf(p.id)!==-1;
-        var isUser=p.id.indexOf('u')===0;
+        var isUser=p.id.toString().indexOf('u')===0;
         return '<div class="card '+p.cat+'">'+(isUser?'<span class="usr-tag">내 장소</span>':'')+'<span class="badge '+p.cat+'">'+catLabel[p.cat]+'</span><h3>'+p.name+'</h3><div class="desc">'+(p.desc||'')+'</div><div class="addr">'+p.addr+'</div><div class="card-actions">'+
             '<button class="fav-btn '+(faved?'active':'')+'" onclick="toggleFav(\''+p.id+'\')">'+(faved?'★ 찜됨':'☆ 찜하기')+'</button>'+
             '<button class="add-btn" onclick="addDirectToSched(\''+p.id+'\')">＋ 일정추가</button>'+
@@ -507,26 +471,26 @@ function addUserPlace(){
     var addr=document.getElementById('npAddr').value.trim();
     if(!name||!addr){ flash('npMsg','⚠️ 장소명과 주소는 필수입니다.'); return; }
     var p={ id:'u'+Date.now(), cat:document.getElementById('npCat').value, name:name, desc:document.getElementById('npDesc').value.trim(), addr:addr };
-    state.userPlaces.push(p); pushToCloud(true);
+    state.userPlaces.push(p); pushToCloud();
     document.getElementById('npName').value=''; document.getElementById('npDesc').value=''; document.getElementById('npAddr').value='';
-    renderGrid(); renderAddSelect(); flash('npMsg','✅ "'+name+'" 추가 완료!');
+    renderGrid(); renderAddSelect(); flash('npMsg','✅ 추가 완료!');
 }
 
 function delUserPlace(id){
-    if(!confirm('이 장소를 삭제할까요?')) return;
-    for(var i=0; i<state.userPlaces.length; i++){ if(state.userPlaces[i].id===id){ state.userPlaces.splice(i,1); break; } }
-    var fi=state.favorites.indexOf(id); if(fi!==-1) state.favorites.splice(fi,1);
-    pushToCloud(true); renderGrid(); renderFavChips(); renderAddSelect();
+    if(!confirm('삭제하시겠습니까?')) return;
+    state.userPlaces = state.userPlaces.filter(p => p.id !== id);
+    state.favorites = state.favorites.filter(fId => fId !== id);
+    pushToCloud(); renderGrid(); renderFavChips(); renderAddSelect();
 }
 
 function toggleFav(id){
     var i=state.favorites.indexOf(id); if(i!==-1) state.favorites.splice(i,1); else state.favorites.push(id);
-    pushToCloud(true); renderGrid(); renderFavChips();
+    pushToCloud(); renderGrid(); renderFavChips();
 }
 
 function renderFavChips(){
     var box=document.getElementById('favChips'); if(!box) return;
-    if(state.favorites.length===0){ box.innerHTML='<div class="empty">아직 찜한 장소가 없어요. 아래 목록에서 ☆ 버튼을 눌러보세요!</div>'; return; }
+    if(state.favorites.length===0){ box.innerHTML='<div class="empty">찜한 장소가 없습니다.</div>'; return; }
     box.innerHTML=state.favorites.map(function(id){
         var p=getPlace(id); if(!p) return '';
         return '<div class="chip">'+catLabel[p.cat].split(' ')[0]+' '+p.name+'<span class="mini-add" onclick="addDirectToSched(\''+id+'\')">＋</span><span class="mini-del" onclick="toggleFav(\''+id+'\')">✕</span></div>';
@@ -543,25 +507,34 @@ function renderDayTabs(){
 function switchDay(idx){ currentDay=idx; renderSchedule(); syncDayLabelInput(); }
 function syncDayLabelInput(){ var el=document.getElementById('dayLabelInput'); if(el) el.value=state.dayLabels[currentDay]||''; }
 
+// 🛠️ 대대적 수정: 드래그 앤 드롭 완벽 구동 전용 렌더러 구현
 function renderSchedule(){
     renderDayTabs();
     var box=document.getElementById('scheduleDays'); if(!box) return;
-    var di=currentDay; var items=state.schedule[di]||[]; var inner;
-    if(items.length===0){ inner='<div class="day-empty">이 날은 비어있어요. 위에서 장소를 선택하고 일정을 추가해 보세요!</div>'; }
-    else {
-        inner='<ul class="sched-list" id="sortableList">'+items.map(function(it,idx){
-            var p=it.id==='arrive'||it.id==='checkin'||it.id==='finish'?it:(getPlace(it.id)||{name:'(삭제됨)',cat:'play',addr:''});
-            var name=it.name||p.name; var cat=it.cat||p.cat; var addr=it.addr||p.addr;
-            return '<li class="sched-item '+cat+'" data-idx="'+idx+'">'+
-                '<span class="drag-handle" style="cursor:move;">⠿</span>'+
-                '<input class="time-input" type="text" value="'+it.t+'" onchange="updateTime('+di+','+idx+',this.value)">'+
-                '<div class="info"><h4>'+name+'</h4><small>📍 '+addr+'</small></div>'+
-                '<button class="sched-map" onclick="openMap(\''+addr+'\')">🗺️</button>'+
-                '<button class="del" onclick="delSchedItem('+di+','+idx+')">삭제</button>'+
-                '</li>';
-        }).join('')+'</ul>';
+    var di=currentDay; 
+    var items=state.schedule[di]||[]; 
+    
+    if(items.length===0){ 
+        box.innerHTML='<div class="day-empty">일정이 비어있습니다. 장소를 선택해서 추가해주세요.</div>'; 
+        return; 
     }
-    box.innerHTML=inner;
+    
+    var inner = '<ul class="sched-list" id="sortableList">';
+    items.forEach(function(it, idx){
+        var p = (it.id==='arrive'||it.id==='checkin'||it.id==='finish') ? it : (getPlace(it.id)||{name:'(삭제됨)',cat:'play',addr:''});
+        var name=it.name||p.name; var cat=it.cat||p.cat; var addr=it.addr||p.addr;
+        
+        inner += '<li class="sched-item '+cat+'" draggable="true" data-idx="'+idx+'">'+
+            '<span class="drag-handle">⠿</span>'+
+            '<input class="time-input" type="text" value="'+it.t+'" onchange="updateTime('+di+','+idx+',this.value)">'+
+            '<div class="info"><h4>'+name+'</h4><small>📍 '+addr+'</small></div>'+
+            '<button class="sched-map" onclick="openMap(\''+addr+'\')">🗺️</button>'+
+            '<button class="del" onclick="delSchedItem('+di+','+idx+')">삭제</button>'+
+            '</li>';
+    });
+    inner += '</ul>';
+    box.innerHTML = inner;
+    
     setupDragAndDrop();
 }
 
@@ -575,20 +548,21 @@ function addDirectToSched(id){
     var p = getPlace(id); if(!p) return;
     var time = prompt("방문 시간을 입력하세요 (예: 14:00)", "12:00");
     if(time === null) return;
+    if(!state.schedule[currentDay]) state.schedule[currentDay] = [];
     state.schedule[currentDay].push({t:time, id:p.id});
     state.schedule[currentDay].sort((a,b)=>a.t.localeCompare(b.t));
-    pushToCloud(true); renderSchedule();
+    pushToCloud(); renderSchedule();
 }
 
 function updateTime(dayIdx, itemIdx, val){
     state.schedule[dayIdx][itemIdx].t = val;
     state.schedule[dayIdx].sort((a,b)=>a.t.localeCompare(b.t));
-    pushToCloud(true); renderSchedule();
+    pushToCloud(); renderSchedule();
 }
 
 function delSchedItem(dayIdx, itemIdx){
     state.schedule[dayIdx].splice(itemIdx,1);
-    pushToCloud(true); renderSchedule();
+    pushToCloud(); renderSchedule();
 }
 
 function renderRoute(){
@@ -600,16 +574,8 @@ function renderRoute(){
             return '<span class="route-node">'+it.t+' '+p.name+'</span>';
         }).join('<span class="route-arrow">→</span>');
         
-        var queryStr = items.map(function(it){
-            var p=it.id==='arrive'||it.id==='checkin'||it.id==='finish'?it:(getPlace(it.id)||{addr:''});
-            return p.name;
-        }).join(' -> ');
-
-        return '<div class="route-day"><h3>🧭 '+label+' 이동 동선</h3>'+
-            '<div class="route-flow">'+(nodes || '<span class="route-empty">등록된 일정이 없습니다.</span>')+'</div>'+
-            (items.length > 0 ? '<div class="route-actions">'+
-            '<button class="route-map-btn" onclick="openMap(\''+queryStr+'\')">🗺️ 카카오맵 동선 검색</button>'+
-            '</div>' : '')+'</div>';
+        return '<div class="route-day"><h3>🧭 '+label+' 이동 경로</h3>'+
+            '<div class="route-flow">'+(nodes || '<span class="route-empty">등록된 일정이 없습니다.</span>')+'</div></div>';
     }).join('');
 }
 
@@ -622,11 +588,10 @@ function loadFlight(){
 
 function saveFlight(){
     if(!state.flight) state.flight = {};
-    var f = state.flight;
     ['fgAir','fgNo','fgDate','fgTime','fgRoute','fgSeat','frAir','frNo','frDate','frTime','frRoute','frSeat','fPax','fPrice','fMemo'].forEach(function(id){
-        var el = document.getElementById(id); if(el) f[id] = el.value.trim();
+        var el = document.getElementById(id); if(el) state.flight[id] = el.value.trim();
     });
-    pushToCloud(true); flash('flightMsg','✅ 항공권 정보 클라우드 저장 완료!');
+    pushToCloud(); flash('flightMsg','✅ 항공권 정보 Realtime DB 저장 완료!');
 }
 
 function loadRent(){
@@ -638,13 +603,13 @@ function loadRent(){
 
 function saveRent(){
     if(!state.rent) state.rent = {};
-    var r = state.rent;
     ['rCompany','rNo','rCar','rIns','rPickTime','rDropTime','rPickPlace','rDropPlace','rTel','rPrice','rMemo'].forEach(function(id){
-        var el = document.getElementById(id); if(el) r[id] = el.value.trim();
+        var el = document.getElementById(id); if(el) state.rent[id] = el.value.trim();
     });
-    pushToCloud(true); flash('rentMsg','✅ 렌트카 정보 클라우드 저장 완료!');
+    pushToCloud(); flash('rentMsg','✅ 렌트카 정보 Realtime DB 저장 완료!');
 }
 
+// 🛠️ 대대적 수정: Realtime DB 덮어쓰기 싱크를 연동한 드래그 앤 드롭 트리거 핸들러
 function setupDragAndDrop(){
     var list = document.getElementById('sortableList'); if(!list) return;
     var items = list.getElementsByClassName('sched-item');
@@ -653,10 +618,14 @@ function setupDragAndDrop(){
     for(var i=0; i<items.length; i++){
         var item = items[i];
         item.addEventListener('dragstart', function(e){
-            dragEl = this; this.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move';
+            dragEl = this; 
+            this.classList.add('dragging'); 
+            e.dataTransfer.effectAllowed = 'move';
         });
+        
         item.addEventListener('dragover', function(e){
-            e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+            e.preventDefault(); 
+            e.dataTransfer.dropEffect = 'move';
             var target = e.target.closest('.sched-item');
             if(target && target !== dragEl){
                 var rect = target.getBoundingClientRect();
@@ -664,6 +633,7 @@ function setupDragAndDrop(){
                 list.insertBefore(dragEl, next ? target.nextSibling : target);
             }
         });
+        
         item.addEventListener('dragend', function(){
             this.classList.remove('dragging');
             var newItems = list.getElementsByClassName('sched-item');
@@ -673,13 +643,15 @@ function setupDragAndDrop(){
                 newSched.push(state.schedule[currentDay][oldIdx]);
             }
             state.schedule[currentDay] = newSched;
-            pushToCloud(true); setTimeout(renderSchedule, 200);
+            
+            // 데이터 추출 순서 정렬 직후 Realtime DB 동기화 강제 전송
+            pushToCloud(); 
+            setTimeout(renderSchedule, 100);
         });
     }
 }
 
 document.addEventListener('DOMContentLoaded', function(){
-    // 상단 정보 저장 핸들러 보완
     document.getElementById('metaSaveBtn').addEventListener('click', function(){
         state.meta = {
             destination: document.getElementById('metaDest').value.trim(),
@@ -687,12 +659,10 @@ document.addEventListener('DOMContentLoaded', function(){
             startDate: document.getElementById('metaSDate').value,
             endDate: document.getElementById('metaEDate').value
         };
-        pushToCloud(true);
-        renderAll();
-        alert('✨ 상단 정보가 클라우드에 확실히 반영되었습니다!');
+        pushToCloud(); renderAll();
+        alert('✨ 상단 기본 정보가 실시간 데이터베이스에 저장되었습니다!');
     });
 
-    // 탭 전환 이벤트
     document.querySelectorAll('.tabs .tab-btn').forEach(function(btn){
         btn.addEventListener('click', function(){
             var tabName = this.getAttribute('data-tab');
@@ -709,7 +679,6 @@ document.addEventListener('DOMContentLoaded', function(){
         });
     });
 
-    // 필터 이벤트
     document.querySelectorAll('.filters .filter-btn').forEach(function(btn){
         btn.addEventListener('click', function(){
             document.querySelectorAll('.filters .filter-btn').forEach(b => b.classList.remove('active'));
@@ -723,26 +692,24 @@ document.addEventListener('DOMContentLoaded', function(){
 
     document.getElementById('dayLabelSave').addEventListener('click', function(){
         var val = document.getElementById('dayLabelInput').value.trim(); if(!val) return;
-        state.dayLabels[currentDay] = val; pushToCloud(true); renderSchedule(); alert('🏷️ 날짜 라벨이 변경되었습니다.');
+        state.dayLabels[currentDay] = val; pushToCloud(); renderSchedule(); alert('🏷️ 날짜 라벨 변경 완료.');
     });
 
     document.getElementById('addBtn').addEventListener('click', function(){
         var pid = document.getElementById('addPlace').value;
         var time = document.getElementById('addTime').value.trim() || '10:00'; if(!pid) return;
+        if(!state.schedule[currentDay]) state.schedule[currentDay] = [];
         state.schedule[currentDay].push({t:time, id:pid});
         state.schedule[currentDay].sort((a,b)=>a.t.localeCompare(b.t));
-        pushToCloud(true); renderSchedule();
+        pushToCloud(); renderSchedule();
     });
 
     document.getElementById('resetBtn').addEventListener('click', function(){
-        if(!confirm('정말 최초 기본 일정으로 전체 초기화할까요?\n직접 적으신 데이터가 덮어씌워집니다.')) return;
+        if(!confirm('기본 스케줄로 전체 초기화할까요?')) return;
         state.schedule = JSON.parse(JSON.stringify(DEFAULT_SCHEDULE));
         state.dayLabels = DEFAULT_DAYS.slice(); 
-        state.favorites = [];
-        state.userPlaces = [];
-        state.flight = {};
-        state.rent = {};
-        pushToCloud(true); renderSchedule();
+        state.favorites = []; state.userPlaces = []; state.flight = {}; state.rent = {};
+        pushToCloud(); renderSchedule();
     });
 
     startFirebase();
